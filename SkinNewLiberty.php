@@ -8,16 +8,20 @@ use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Title\Title;
 
 class SkinNewLiberty extends SkinMustache {
+
     public function getTemplateData() {
 		global $wgNewLibertyEnableLiveRC, $wgNewLibertyMaxRecent, $wgNewLibertyLiveRCArticleNamespaces, $wgNewLibertyLiveRCTalkNamespaces;
         $data = parent::getTemplateData();
 
+		// Add parsed navbar data
         $data['navbar'] = $this->renderPortal( $this->parseNavbar() );
 
+		// Remove notice if user has disabled it
 		if($this->getRequest()->getCookie('disable-notice')) {
 			unset($data['html-site-notice']);
 		}
 
+		// Convert portlet items to associative arrays
 		if(array_key_exists('data-languages', $data['data-portlets'])) {
 			$data['data-portlets']['data-languages']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-languages']['array-items']);
 		}
@@ -28,8 +32,11 @@ class SkinNewLiberty extends SkinMustache {
 			$result = array();
 			foreach($data['data-portlets']['data-personal']['array-items'] as $item) {
 				if($item['id'] == 'pt-notifications-notice') $item['id'] = 'pt-notifications';
+				// Add divider before logout menu
 				if($item['id'] == 'pt-logout') $result[] = $divider;
+				// Add item if not excluded
 				if(!in_array($item['id'], $exclude_keys)) $result[] = $item;
+				// Add divider after user page menu
 				if($item['id'] == 'pt-userpage') $result[] = $divider;
 
 				if($item['id'] == 'pt-logout') $data['logout-btn'] = $item;
@@ -42,8 +49,8 @@ class SkinNewLiberty extends SkinMustache {
 		if(array_key_exists('data-actions', $data['data-portlets'])) {
 			$data['data-portlets']['data-actions']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-actions']['array-items']);
 		}
-		
 		if(array_key_exists('data-notifications', $data['data-portlets'])) {
+			// Filter out all read notification links
 			$result = array();
 			foreach($data['data-portlets']['data-notifications']['array-items'] as $key => $item) {
 				foreach($item['array-links'] as $link) {
@@ -57,6 +64,7 @@ class SkinNewLiberty extends SkinMustache {
 			$data['data-portlets']['data-notifications']['array-items'] = $result;
 		}
 
+		// Add "designed by libre" icon to footer
 		if(array_key_exists('data-icons', $data['data-footer'])) {
 			$src = $this->getSkin()->getConfig()->get( 'StylePath' ) . '/NewLiberty/img/designedbylibre.png';
 			$href = '//librewiki.net';
@@ -69,6 +77,7 @@ class SkinNewLiberty extends SkinMustache {
 			);
 		}
 
+		// Live recent changes
 		$data['liverc-enabled'] = $wgNewLibertyEnableLiveRC;
 		$articleNS = implode( '|', $wgNewLibertyLiveRCArticleNamespaces );
 		$talkNS = implode( '|', $wgNewLibertyLiveRCTalkNamespaces );
@@ -84,9 +93,11 @@ class SkinNewLiberty extends SkinMustache {
 		$data['liverc-items'] = $recentItems;
 		$data['link-recentchanges'] = SpecialPage::getTitleFor( 'Recentchanges' )->getLocalURL();
 
+		// Login box
 		$data['user-is-registered'] = $this->getUser()->isRegistered();
 		$data['user-avatar'] = $this->getUserAvatar();
 
+		// Login modal form
 		$data['link-createaccount'] = SpecialPage::getTitleFor( 'createaccount' )->getLocalURL();
 		$data['link-userlogin'] = SpecialPage::getTitleFor( 'userlogin' )->getLocalURL();
 		$data['link-passwordreset'] = SpecialPage::getTitleFor( 'passwordreset' )->getLocalURL();
@@ -94,6 +105,13 @@ class SkinNewLiberty extends SkinMustache {
         return $data;
     }
 
+	/**
+	 * Converts portlet array-items into key-value associative array.
+	 *
+	 * @param array $items
+	 * @return array
+	 * @access protected
+	 */
 	protected function convertPortletItems($items) {
 		$result = array();
 		foreach($items as $item) {
@@ -227,33 +245,35 @@ class SkinNewLiberty extends SkinMustache {
 			);
 		}
 
-		$LibertyDarkCss = "body, .Liberty, .dropdown-menu, .dropdown-item, .Liberty .nav-wrapper .navbar .form-inline .btn, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item .nav-link.active, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > th, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > td, table.mw_metadata th, .Liberty .content-wrapper .liberty-content .liberty-content-main table.infobox th, #preferences fieldset:not(.prefsection), #preferences div.mw-prefs-buttons, .navbox, .navbox-subgroup, .navbox > tbody > tr:nth-child(even) > .navbox-list {
-			background-color: #000;
-			color: #DDD;
-		}
+		$LibertyDarkCss = "
+			body, .Liberty, .dropdown-menu, .dropdown-item, .Liberty .nav-wrapper .navbar .form-inline .btn, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item .nav-link.active, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > th, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > td, table.mw_metadata th, .Liberty .content-wrapper .liberty-content .liberty-content-main table.infobox th, #preferences fieldset:not(.prefsection), #preferences div.mw-prefs-buttons, .navbox, .navbox-subgroup, .navbox > tbody > tr:nth-child(even) > .navbox-list {
+				background-color: #000;
+				color: #DDD;
+			}
 
-		.liberty-content-header, .liberty-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item, .Liberty .content-wrapper .liberty-content .liberty-content-header, .Liberty .content-wrapper .liberty-footer, .editOptions, html .wikiEditor-ui-toolbar, #pagehistory li.selected, .mw-datatable td, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > td, table.mw_metadata td, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable, .Liberty .content-wrapper .liberty-content .liberty-content-main table.infobox, #preferences, .navbox-list, .dropdown-divider {
-			background-color: #1F2023;
-			color: #DDD;
-		}
+			.liberty-content-header, .liberty-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item, .Liberty .content-wrapper .liberty-content .liberty-content-header, .Liberty .content-wrapper .liberty-footer, .editOptions, html .wikiEditor-ui-toolbar, #pagehistory li.selected, .mw-datatable td, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable tr > td, table.mw_metadata td, .Liberty .content-wrapper .liberty-content .liberty-content-main table.wikitable, .Liberty .content-wrapper .liberty-content .liberty-content-main table.infobox, #preferences, .navbox-list, .dropdown-divider {
+				background-color: #1F2023;
+				color: #DDD;
+			}
 
-		.Liberty .content-wrapper .liberty-content .liberty-content-main, .mw-datatable th, .mw-datatable tr:hover td, textarea, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content, div.mw-warning-with-logexcerpt, div.mw-lag-warn-high, div.mw-cascadeprotectedwarning, div#mw-protect-cascadeon {
-			background-color: #000;
-		}
+			.Liberty .content-wrapper .liberty-content .liberty-content-main, .mw-datatable th, .mw-datatable tr:hover td, textarea, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content, div.mw-warning-with-logexcerpt, div.mw-lag-warn-high, div.mw-cascadeprotectedwarning, div#mw-protect-cascadeon {
+				background-color: #000;
+			}
 
-		.Liberty .content-wrapper .liberty-content .liberty-content-header .title>h1, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content .live-recent-list .recent-item, caption { color: #DDD; }
+			.Liberty .content-wrapper .liberty-content .liberty-content-header .title>h1, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content .live-recent-list .recent-item, caption { color: #DDD; }
 
-		.btn-secondary { background: transparent; color: #DDD; }
+			.btn-secondary { background: transparent; color: #DDD; }
 
-		#pagehistory li { border: 0; }
+			#pagehistory li { border: 0; }
 
-		.Liberty .content-wrapper .liberty-footer, .Liberty .content-wrapper .liberty-content .liberty-content-header, .Liberty .content-wrapper .liberty-content .liberty-content-main, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item + .nav-item, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn:hover, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn:focus, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn, .dropdown-menu, .dropdown-divider, .Liberty .content-wrapper .liberty-content .liberty-content-main fieldset, hr, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content .live-recent-list li, .mw-changeslist-legend, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools { border-color: #555; }
+			.Liberty .content-wrapper .liberty-footer, .Liberty .content-wrapper .liberty-content .liberty-content-header, .Liberty .content-wrapper .liberty-content .liberty-content-main, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-footer, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-header .nav .nav-item + .nav-item, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn:hover, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn:focus, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools .tools-btn, .dropdown-menu, .dropdown-divider, .Liberty .content-wrapper .liberty-content .liberty-content-main fieldset, hr, .Liberty .content-wrapper .liberty-sidebar .live-recent-wrapper .live-recent .live-recent-content .live-recent-list li, .mw-changeslist-legend, .Liberty .content-wrapper .liberty-content .liberty-content-header .content-tools { border-color: #555; }
 
-		.flow-post, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc .toctext { color: #DDD; }
-		.flow-topic-titlebar { color: #000; }
-		.flow-ui-navigationWidget { color: #FFF; }
-		.Liberty .content-wrapper .liberty-content .liberty-content-main .toccolours, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc ul, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc li { background-color: #000; }
-		.Liberty .content-wrapper .liberty-content .liberty-content-main .toc .toctitle { background-color: #1F2023; }";
+			.flow-post, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc .toctext { color: #DDD; }
+			.flow-topic-titlebar { color: #000; }
+			.flow-ui-navigationWidget { color: #FFF; }
+			.Liberty .content-wrapper .liberty-content .liberty-content-main .toccolours, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc ul, .Liberty .content-wrapper .liberty-content .liberty-content-main .toc li { background-color: #000; }
+			.Liberty .content-wrapper .liberty-content .liberty-content-main .toc .toctitle { background-color: #1F2023; }
+		";
 
 		$out->addInlineStyle( "@media (prefers-color-scheme: dark) { $LibertyDarkCss }" );
 	}
