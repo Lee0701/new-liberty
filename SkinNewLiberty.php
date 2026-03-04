@@ -43,8 +43,35 @@ class SkinNewLiberty extends SkinMustache {
 			}
 			$data['data-portlets']['data-personal']['array-items'] = $result;
 		}
+		if(array_key_exists('data-associated-pages', $data['data-portlets'])) {
+			$data['data-portlets']['data-associated-pages']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-associated-pages']['array-items']);
+			$is_talk = $this->getTitle()->isTalkPage();
+			$result = array();
+			foreach($data['data-portlets']['data-associated-pages']['array-items'] as $item) {
+				if($item['id'] == 'ca-talk' and !$is_talk) $result[] = $item;
+				if(str_contains($item['id'], 'ca-nstab-') and $is_talk) $result[] = $item;
+			}
+			$data['data-portlets']['data-associated-pages']['array-items'] = $result;
+		}
 		if(array_key_exists('data-views', $data['data-portlets'])) {
-			$data['data-portlets']['data-views']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-views']['array-items']);
+			$associated_pages = $data['data-portlets']['data-associated-pages']['array-items'];
+			$views = $this->convertPortletItems($data['data-portlets']['data-views']['array-items']);
+			foreach($views as $key => $item) {
+				if($item['id'] == 'ca-view') unset($views[$key]);
+			}
+			$result = array_merge($associated_pages, $views);
+			$icons = array(
+				'ca-nstab-main' => 'file-alt',
+				'ca-nstab-user' => 'user',
+				'ca-nstab-image' => 'image',
+				'ca-talk' => 'comments',
+				'ca-edit' => 'edit',
+				'ca-history' => 'history',
+			);
+			foreach($result as $key => $item) {
+				if(in_array($item['id'], array_keys($icons))) $result[$key]['icon'] = $icons[$item['id']];
+			}
+			$data['data-portlets']['data-views']['array-items'] = $result;
 		}
 		if(array_key_exists('data-actions', $data['data-portlets'])) {
 			$data['data-portlets']['data-actions']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-actions']['array-items']);

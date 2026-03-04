@@ -1,14 +1,21 @@
 <div class="content-tools">
     <div class="btn-group" role="group" aria-label="content-tools">
         {{#data-portlets.data-views.array-items}}
-            <a class="btn btn-secondary tools-btn" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">{{{ text }}}</a>
+            <a class="btn btn-secondary tools-btn" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
+                {{#icon}}
+                    <i class="fas fa-{{ . }}"></i>
+                {{/icon}}
+                {{{ text }}}
+            </a>
         {{/data-portlets.data-views.array-items}}
         <button type="button" class="btn btn-secondary tools-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
         </button>
         <div class="dropdown-menu dropdown-menu-right" role="menu">
             {{#data-portlets.data-actions.array-items}}
-                <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">{{{ text }}}</a>
+                <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
+                    {{{ text }}}
+                </a>
             {{/data-portlets.data-actions.array-items}}
         </div>
     </div>
