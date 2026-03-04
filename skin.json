@@ -1,0 +1,191 @@
+{
+    "name": "NewLiberty",
+    "version": "0.0.1",
+    "author": "EighteenChild",
+    "namemsg": "skinname-new-liberty",
+    "descriptionmsg": "skindesc-new-liberty",
+    "type": "skin",
+    "requires": {
+        "MediaWiki": ">= 1.40.0"
+    },
+    "ValidSkinNames": {
+        "new-liberty": {
+            "class": "SkinNewLiberty",
+            "args": [
+                {
+                    "name": "new-liberty",
+                    "responsive": true,
+                    "messages": [
+                        "skinname-new-liberty",
+                        "skindesc-new-liberty",
+                        "mainpage",
+                        "otherlanguages",
+						"recentchanges",
+						"new-liberty-recent-discussions",
+						"new-liberty-view-more",
+						"new-liberty-login",
+						"userlogin-yourname-ph",
+						"userlogin-yourpassword",
+						"userlogin-yourpassword-ph",
+						"userlogin-joinproject",
+						"new-liberty-remember",
+						"new-liberty-login-btn",
+						"new-liberty-forgot-pw",
+						"new-liberty-login-alter"
+                    ],
+                    "scripts": [
+                        "skins.new-liberty"
+                    ],
+                    "styles": [
+                        "skins.new-liberty"
+                    ]
+                }
+            ]
+        }
+    },
+    "ResourceModules": {
+        "skins.new-liberty": {
+			"class": "MediaWiki\\ResourceLoader\\SkinModule",
+			"features": {
+				"interface": false,
+				"toc": false,
+				"content-media": true,
+				"content-tables": true,
+				"i18n-ordered-lists": true,
+				"i18n-headings": true
+			},
+            "styles": {
+                "fontawesome/css/all.min.css": {
+					"media": "all"
+                },
+                "fontawesome/css/v4-shims.min.css": {
+					"media": "all"
+                },
+				"bootstrap/css/bootstrap.min.css": {
+					"media": "all"
+				},
+				"css/default.css": {
+					"media": "all"
+				},
+				"css/default_mobile.css": {
+					"media": "all"
+				},
+				"css/wiki.css": {
+					"media": "all"
+				},
+				"css/only-mw.css": {
+					"media": "all"
+				},
+				"css/webfont.css": {
+					"media": "all"
+				},
+				"css/wiki-table.css": {
+					"media": "all"
+				},
+				"css/wikiedittor-liberty.css": {
+					"media": "all"
+				},
+				"css/extensions/RelatedArticles.css": {
+					"media": "all"
+				},
+				"css/print.css": {
+					"media": "print"
+				}
+            }
+        },
+		"skins.new-liberty.ads": {
+			"scripts": "js/ads.js"
+		},
+		"skins.new-liberty.bootstrap": {
+			"scripts": [
+				"js/lib/jquery.ba-throttle-debounce.js",
+				"bootstrap/js/bootstrap.min.js"
+			]
+		},
+		"skins.new-liberty.layoutjs": {
+			"scripts": [
+				"js/delay-scrolling.js",
+				"js/disable-notice.js",
+				"js/share-button.js",
+				"js/layout.js",
+				"js/table.js",
+				"js/scroll-button.js"
+			],
+			"dependencies": "mediawiki.cookie"
+		},
+		"skins.new-liberty.liverc": {
+			"scripts": "js/live-recent.js",
+			"messages": [
+				"new-liberty-feed-new"
+			],
+			"dependencies": "mediawiki.util"
+		},
+		"skins.new-liberty.loginjs": {
+			"scripts": "js/login-request.js",
+			"dependencies": "mediawiki.util"
+		}
+    },
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteSkinPath": "NewLiberty"
+	},
+	"ResourceModuleSkinStyles": {
+		"new-liberty": {
+			"+ext.relatedArticles.readMore": "css/extensions/RelatedArticles.css",
+			"+ext.echo.ui": "css/extensions/Echo.css",
+			"+mediawiki.action.view.filepage": "css/skinStyles/mediawiki.action.view.filepage.css",
+			"+mediawiki.special.preferences.styles": "css/skinStyles/mediawiki.special.preferences.styles.css"
+		}
+	},
+    "AutoloadClasses": {
+        "SkinNewLiberty": "SkinNewLiberty.php",
+		"NewLibertyHooks": "NewLibertyHooks.php"
+    },
+    "Hooks": {
+		"OutputPageBodyAttributes": "NewLibertyHooks::onOutputPageBodyAttributes"
+    },
+    "MessagesDirs": {
+        "NewLiberty": [
+            "i18n"
+        ]
+    },
+    "config": {
+        "NewLibertyPrimaryColor": {
+            "value": "#4188F1"
+        },
+        "NewLibertySecondaryColor": {
+            "value": null
+        },
+		"NewLibertyUseGravatar": {
+			"value": true
+		},
+		"NewLibertyEnableLiveRC": {
+			"value": true
+		},
+		"NewLibertyLiveRCArticleNamespaces": {
+			"value": [
+				0,
+				4,
+				10,
+				12,
+				14
+			]
+		},
+		"NewLibertyLiveRCTalkNamespaces": {
+			"value": [
+				1,
+				3,
+				5,
+				7,
+				9,
+				11,
+				13,
+				15
+			]
+		},
+		"NewLibertyMaxRecent": {
+			"value": 10
+		}
+    },
+    "manifest_version": 2
+}

@@ -1,0 +1,32 @@
+<div
+    class="live-recent"
+    data-article-ns="{{ liverc-article-ns }}" 
+    data-talk-ns="{{ liverc-talk-ns }}">
+
+    <div class="live-recent-header">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="javascript:" class="nav-link active" id="liberty-recent-tab1">
+                    {{ msg-recentchanges }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:" class="nav-link" id="liberty-recent-tab2">
+                    {{ msg-new-liberty-recent-discussions }}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="live-recent-content">
+        <ul class="live-recent-list" id="live-recent-list">
+            {{#liverc-items}}
+                <li><span class="{{ class }}">{{{ html-content }}}</span></li>
+            {{/liverc-items}}
+        </ul>
+    </div>
+    <div class="live-recent-footer">
+        <a href="{{ link-recentchanges }}">
+            <span class="label label-info">{{ msg-new-liberty-view-more }}</span>
+        </a>
+    </div>
+</div>

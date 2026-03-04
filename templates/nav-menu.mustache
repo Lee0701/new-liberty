@@ -1,0 +1,35 @@
+<nav class="navbar navbar-dark">
+    <a class="navbar-brand" href="{{ link-mainpage }}"></a>
+    <ul class="nav navbar-nav">
+        {{{ navbar }}}
+
+        <!-- Add language switcher to main navbar -->
+        {{#data-portlets.data-languages}}
+            <li class="dropdown nav-item">
+                <a class="nav-link dropdown-toggle dropdown-toggle-fix"
+                    data-toggle="dropdown"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="true"
+                    title="도구">
+
+                    <span class="fa fa-language" aria-hidden="true"></span>
+                    <span class="hide-title">{{ msg-otherlanguages }}</span>
+                </a>
+                <div class="dropdown-menu" role="menu">
+                    {{#array-items}}
+                    <a class="dropdown-item {{ class }}"
+                        href="{{ href }}"
+                        title="{{ title }}">
+
+                        {{ title }}
+                    </a>
+                    {{/array-items}}
+                </div>
+            </li>
+        {{/data-portlets.data-languages}}
+    </ul>
+    {{>login-box}}
+    {{>notification}}
+    {{>search-box}}
+</nav>

@@ -1,0 +1,24 @@
+{{#data-search-box}}
+    <form action="{{ form-action }}" id="searchform" class="form-inline">
+        <div class="input-group">
+            {{#array-input-attributes}}
+                <input
+                    type="{{ type }}"
+                    class="form-control"
+                    name="{{ name }}"
+                    placeholder="{{ placeholder }}"
+                    aria-label="{{ aria-label }}"
+                    autocapitalize="{{ autocapitalize }}"
+                    title="{{ title }}"
+                    accessKey="{{ accessKey }}">
+            {{/array-input-attributes}}
+            <span class="input-group-btn">
+                {{#array-button-go-attributes}}
+                    <button type="{{ type }}" id="searchGoButton" class="btn btn-secondary" name="{{ name }}" title="{{ title }}">
+                        <span class="fa fa-search"></span>
+                    </button>
+                {{/array-button-go-attributes}}
+            </span>
+        </div>
+    </form>
+{{/data-search-box}}

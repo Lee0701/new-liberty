@@ -1,0 +1,61 @@
+<header>
+    <div class="nav-wrapper navbar-fixed-top">
+        {{>nav-menu}}
+    </div>
+</header>
+<section>
+    <div class="content-wrapper">
+        <aside>
+            <div class="liberty-sidebar">
+                <div class="live-recent-wrapper">
+                    {{#liverc-enabled}}
+                        {{>live-recent}}
+                    {{/liverc-enabled}}
+                </div>
+            </div>
+        </aside>
+        <div class="container-fluid liberty-content">
+            <div class="liberty-content-header">
+                {{#html-site-notice}}
+                    <div class="alert alert-dismissible fade in alert-info liberty-notice" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{{ . }}}
+                    </div>
+                {{/html-site-notice}}
+                {{>contents-toolbox}}
+                <div class="title">
+                    <h1>{{{ html-title }}}</h1>
+                </div>
+                <div class="contentSub" {{{ html-user-language-attributes }}}>
+                    {{{ html-subtitle }}}
+                </div>
+            </div>
+            <div class="liberty-content-main" id="content">
+                {{#html-newtalk}}
+                    <div class="usermessage">{{{ . }}}</div>
+                {{/html-newtalk}}
+                {{#html-categories}}
+                    {{{ . }}}
+                {{/html-categories}}
+                <article class="mw-body-content" id="mw-content-text">
+                    {{{ html-body-content }}}
+                </article>
+            </div>
+            <footer>
+                <div class="liberty-footer">
+                    {{#html-after-content}}
+                        {{{ . }}}
+                    {{/html-after-content}}
+                    {{>footer}}
+                </div>
+            </footer>
+            <div id="liberty-bottombtn">
+                <div class="scroll-button" id="liberty-scrollup"><i class="fas fa-angle-up"></i></div>
+                <div class="scroll-button" id="liberty-scrolldown"><i class="fas fa-angle-down"></i></div>
+            </div>
+        </div>
+    </div>
+</section>
+{{>login-modal}}

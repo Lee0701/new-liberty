@@ -1,0 +1,32 @@
+<div class="modal fade login-modal" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ msg-new-liberty-login }}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-login-alert" class="alert alert-hidden alert-danger" role="alert">
+                </div>
+                <form id="modal-loginform" name="userlogin" class="modal-loginform" method="post">
+                    <input class="loginText form-control" id="wpName1" tabindex="1" placeholder="{{ msg-userlogin-yourname-ph }}" value="" name="lgname">
+                    <label for="inputPassword" class="sr-only">{{ msg-userlogin-yourpassword }}</label>
+                    <input class="loginPassword form-control" id="wpPassword1" tabindex="2" placeholder="{{ msg-userlogin-yourpassword-ph }}" type="password" name="lgpassword">
+                    <div class="modal-checkbox">
+                        <input name="lgremember" type="checkbox" value="1" id="lgremember" tabindex="3">
+                        <label for="lgremember">{{ msg-new-liberty-remember }}</label>
+                    </div>
+                    <input class="btn btn-success btn-block" type="submit" value="{{ msg-new-liberty-login-btn }}" tabindex="4">
+                    <a href="{{ link-createaccount }}" class="btn btn-primary btn-block" tabindex="5" type="submit">{{ msg-userlogin-joinproject }}</a>
+                    <a href="{{ link-passwordreset }}">{{ msg-new-liberty-forgot-pw }}</a>
+                    <br>
+                    <a href="{{ link-userlogin }}">{{ msg-new-liberty-login-alter }}</a>
+                    <input type="hidden" name="action" value="login" />
+                    <input type="hidden" name="format" value="json" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

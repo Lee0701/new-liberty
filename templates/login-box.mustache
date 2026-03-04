@@ -1,0 +1,32 @@
+<div class="navbar-login">
+    {{#user-is-registered}}
+        <div class="dropdown login-menu">
+            <a class="dropdown-toggle" type="button" id="login-menu" 
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{{ user-avatar }}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right login-dropdown-menu" aria-labelledby="login-menu">
+                {{#data-portlets.data-personal}}
+                    {{#array-items}}
+                        {{^is-divider}}
+                            <a id="{{ id }}" class="dropdown-item" href="{{ href }}" title="{{ title }}">{{{ text }}}</a>
+                        {{/is-divider}}
+                        {{#is-divider}}
+                            <div class="dropdown-divider"></div>
+                        {{/is-divider}}
+                    {{/array-items}}
+                {{/data-portlets.data-personal}}
+            </div>
+        </div>
+        {{#logout-btn}}
+            <a href="{{ href }}" class="hide-logout logout-btn" title="{{ title }}">
+                <span class="fa fa-sign-out"></span>
+            </a>
+        {{/logout-btn}}
+    {{/user-is-registered}}
+    {{^user-is-registered}}
+        <a href="#" class="none-outline" data-toggle="modal" data-target="#login-modal">
+            <span class="fa fa-sign-in"></span>
+        </a>
+    {{/user-is-registered}}
+</div>
