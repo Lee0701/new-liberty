@@ -48,7 +48,9 @@ class SkinNewLiberty extends SkinMustache {
 			$is_talk = $this->getTitle()->isTalkPage();
 			$result = array();
 			foreach($data['data-portlets']['data-associated-pages']['array-items'] as $item) {
+				// Select talk link if current page is non talk page
 				if($item['id'] == 'ca-talk' and !$is_talk) $result[] = $item;
+				// Select page link if current page is talk page
 				if(str_contains($item['id'], 'ca-nstab-') and $is_talk) $result[] = $item;
 			}
 			$data['data-portlets']['data-associated-pages']['array-items'] = $result;
@@ -57,9 +59,12 @@ class SkinNewLiberty extends SkinMustache {
 			$associated_pages = $data['data-portlets']['data-associated-pages']['array-items'];
 			$views = $this->convertPortletItems($data['data-portlets']['data-views']['array-items']);
 			foreach($views as $key => $item) {
+				// Remove view page link (as it is already in associated pages list)
 				if($item['id'] == 'ca-view') unset($views[$key]);
 			}
+			// Merge associated pages links into views links
 			$result = array_merge($associated_pages, $views);
+			// Add icon to views links
 			$icons = array(
 				'ca-nstab-main' => 'file-alt',
 				'ca-nstab-user' => 'user',
