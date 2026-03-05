@@ -1,7 +1,7 @@
 <div class="content-tools">
     <div class="btn-group" role="group" aria-label="content-tools">
         {{#data-portlets.data-views.array-items}}
-            <a class="btn btn-secondary tools-btn" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
+            <a class="btn btn-secondary tools-btn" id="{{ id }}" href="{{ href }}" title="{{ title }}" accesskey="{{ accesskey }}">
                 {{#icon}}
                     <i class="fas fa-{{ . }}"></i>
                 {{/icon}}
@@ -14,7 +14,7 @@
         <div class="dropdown-menu dropdown-menu-right" role="menu">
             {{#data-portlets.data-actions.array-items}}
                 {{^is-divider}}
-                    <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
+                    <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accesskey="{{ accesskey }}">
                         {{{ text }}}
                     </a>
                 {{/is-divider}}
