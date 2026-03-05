@@ -17,7 +17,7 @@ You can configure the skin by adding the following to your `LocalSettings.php`:
 * `$wgNewLibertyMaxRecent`
 
 ### Navigation Menu
-Fill out `MediaWiki:Liberty-Navbar` with the desired menu items. The format is as follows:
+Fill out `MediaWiki:new-liberty-navbar` with the desired menu items. The format is as follows:
 
 `* icon=(Icon) | display=(Display) | title=(Hover text) | link=(Link to page) | access=(Access key) | class=(Custom classname) | group=(Required group name) | right=(Required right name)`
 

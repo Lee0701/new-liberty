@@ -499,7 +499,7 @@ class SkinNewLiberty extends SkinMustache {
 	}
 
 	/**
-	 * Parse [[MediaWiki:Liberty-Navbar]].
+	 * Parse [[MediaWiki:new-liberty-navbar]].
 	 *
 	 * Its format is:
 	 * * <icon name>|Name of the menu displayed to the user
@@ -516,13 +516,13 @@ class SkinNewLiberty extends SkinMustache {
 		$userName = $skin->getUser()->getName();
 		$userLang = $skin->getLanguage()->mCode;
 		$globalData = $this->getContentText( $this->getContentOfTitle(
-			Title::newFromText( 'Liberty-Navbar', NS_MEDIAWIKI )
+			Title::newFromText( 'new-liberty-navbar', NS_MEDIAWIKI )
 		) );
 		$globalLangData = $this->getContentText( $this->getContentOfTitle(
-			Title::newFromText( 'Liberty-Navbar/' . $userLang, NS_MEDIAWIKI )
+			Title::newFromText( 'new-liberty-navbar/' . $userLang, NS_MEDIAWIKI )
 		) );
 		$userData = $this->getContentText( $this->getContentOfTitle(
-			Title::newFromText( $userName . '/Liberty-Navbar', NS_USER )
+			Title::newFromText( $userName . '/new-liberty-navbar', NS_USER )
 		) );
 		if ( !empty( $userData ) ) {
 			$data = $userData;
@@ -531,7 +531,7 @@ class SkinNewLiberty extends SkinMustache {
 		} else {
 			$data = $globalData;
 		}
-		// Well, [[MediaWiki:Liberty-Navbar]] *should* have some content, but
+		// Well, [[MediaWiki:new-liberty-navbar]] *should* have some content, but
 		// if it doesn't, bail out here so that we don't trigger E_NOTICEs
 		// about undefined indexes later on
 		if ( empty( $data ) ) {
