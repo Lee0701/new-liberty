@@ -28,14 +28,14 @@ class SkinNewLiberty extends SkinMustache {
 		if(array_key_exists('data-personal', $data['data-portlets'])) {
 			$data['data-portlets']['data-personal']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-personal']['array-items']);
 			$divider = array('is-divider' => true);
-			$exclude_keys = array('pt-notifications-alert');
+			$exclude_ids = array('pt-notifications-alert');
 			$result = array();
 			foreach($data['data-portlets']['data-personal']['array-items'] as $item) {
 				if($item['id'] == 'pt-notifications-notice') $item['id'] = 'pt-notifications';
 				// Add divider before logout menu
 				if($item['id'] == 'pt-logout') $result[] = $divider;
 				// Add item if not excluded
-				if(!in_array($item['id'], $exclude_keys)) $result[] = $item;
+				if(!in_array($item['id'], $exclude_ids)) $result[] = $item;
 				// Add divider after user page menu
 				if($item['id'] == 'pt-userpage') $result[] = $divider;
 
@@ -78,8 +78,26 @@ class SkinNewLiberty extends SkinMustache {
 			}
 			$data['data-portlets']['data-views']['array-items'] = $result;
 		}
+		if(array_key_exists('array-portlets-rest', $data['data-portlets-sidebar'])) {
+			$data['data-portlets-sidebar']['array-portlets-rest'][0]['array-items'] = $this->convertPortletItems($data['data-portlets-sidebar']['array-portlets-rest'][0]['array-items']);
+		}
 		if(array_key_exists('data-actions', $data['data-portlets'])) {
-			$data['data-portlets']['data-actions']['array-items'] = $this->convertPortletItems($data['data-portlets']['data-actions']['array-items']);
+			$actions = $this->convertPortletItems($data['data-portlets']['data-actions']['array-items']);
+			$rest = $data['data-portlets-sidebar']['array-portlets-rest'][0]['array-items'];
+			$divider = array('is-divider' => true);
+			$exclude_ids = array('t-upload', 't-specialpages', 't-recentchangeslinked');
+			$result = array();
+			foreach(array_merge($actions, $rest) as $item) {
+				// Add item if not excluded
+				if(!in_array($item['id'], $exclude_ids)) $result[] = $item;
+				// Add divider after delete menu
+				if($item['id'] == 'ca-delete') $result[] = $divider;
+				// Add divider after protect menu
+				if($item['id'] == 'ca-protect') $result[] = $divider;
+				// Add divider after what links here menu
+				if($item['id'] == 't-whatlinkshere') $result[] = $divider;
+			}
+			$data['data-portlets']['data-actions']['array-items'] = $result;
 		}
 		if(array_key_exists('data-notifications', $data['data-portlets'])) {
 			// Filter out all read notification links

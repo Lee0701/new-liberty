@@ -13,9 +13,14 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" role="menu">
             {{#data-portlets.data-actions.array-items}}
-                <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
-                    {{{ text }}}
-                </a>
+                {{^is-divider}}
+                    <a class="dropdown-item" id="{{ id }}" href="{{ href }}" title="{{ title }}" accessKey="{{ accessKey }}">
+                        {{{ text }}}
+                    </a>
+                {{/is-divider}}
+                {{#is-divider}}
+                    <div class="dropdown-divider"></div>
+                {{/is-divider}}
             {{/data-portlets.data-actions.array-items}}
         </div>
     </div>
