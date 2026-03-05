@@ -511,7 +511,10 @@ class SkinNewLiberty extends SkinMustache {
 		global $wgArticlePath;
 
 		$headings = [];
-		$currentHeading = null;
+		foreach(range(0, 10) as $i) {
+			$headings[] = [];
+		}
+
 		$skin = $this->getSkin();
 		$userName = $skin->getUser()->getName();
 		$userLang = $skin->getLanguage()->mCode;
@@ -535,7 +538,7 @@ class SkinNewLiberty extends SkinMustache {
 		// if it doesn't, bail out here so that we don't trigger E_NOTICEs
 		// about undefined indexes later on
 		if ( empty( $data ) ) {
-			return $headings;
+			return $headings[0];
 		}
 
 		$lines = explode( "\n", $data );
@@ -544,15 +547,18 @@ class SkinNewLiberty extends SkinMustache {
 
 		foreach ( $lines as $line ) {
 			$line = rtrim( $line, "\r" );
+			$level = 0;
 			if ( $line[0] !== '*' ) {
 				// Line does not start with '*'
 				continue;
+			} else {
+				for($level = 0 ; $line[$level] == '*' ; $level++);
 			}
-			if ( $line[1] !== '*' ) {
+			if ( $level > 0 ) {
 				// First level menu
 				$data = [];
 				$split = explode( '|', $line );
-				$split[0] = substr( $split[0], 1 );
+				$split[0] = substr( $split[0], $level );
 				foreach ( $split as $key => $value ) {
 					$valueArr = explode( '=', trim( $value ) );
 					if ( isset( $valueArr[1] ) ) {
@@ -686,231 +692,13 @@ class SkinNewLiberty extends SkinMustache {
 					'right' => $right
 				];
 				// @codingStandardsIgnoreEnd
-				$level2Children = &$item['children'];
-				$headings[] = $item;
-				continue;
-			}
-			if ( $line[2] !== '*' ) {
-				// Second level menu
-				// Initialize item
-				$icon = null;
-				$text = null;
-				$title = null;
-				$href = null;
-				$access = null;
-				$classes = [];
-				$group = null;
-				$right = null;
-
-				$data = [];
-				$split = explode( '|', $line );
-				$split[0] = substr( $split[0], 2 );
-				foreach ( $split as $key => $value ) {
-					$valueArr = explode( '=', trim( $value ) );
-					if ( isset( $valueArr[1] ) ) {
-						$data[$valueArr[0]] = $valueArr[1];
-					} else {
-						$data[$types[$key]] = trim( $value );
-					}
-				}
-
-				// Icon
-				$icon = isset( $data['icon'] ) ? htmlentities( $data['icon'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// Group
-				$group = isset( $data['group'] ) ? htmlentities( $data['group'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// Right
-				$right = isset( $data['right'] ) ? htmlentities( $data['right'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// support the usual [[MediaWiki:Sidebar]] syntax of
-				// ** link target|<some MW: message name> and if the
-				// thing on the right side of the pipe isn't the name of a MW:
-				// message, then and _only_ then render it as-is
-				if ( isset( $data['display'] ) ) {
-					$textObj = $skin->msg( $data['display'] );
-					if ( $textObj->isDisabled() ) {
-						$text = htmlentities( $data['display'], ENT_QUOTES, 'UTF-8' );
-					} else {
-						$text = $textObj->text();
-					}
-				} else {
-					$text = '';
-				}
-
-				// If icon and text both empty
-				if ( empty( $icon ) && empty( $text ) ) {
-					continue;
-				}
-
-				// Title
-				if ( isset( $data['title'] ) ) {
-					$titleObj = $skin->msg( $data['title'] );
-					if ( $titleObj->isDisabled() ) {
-						$title = htmlentities( $data['title'], ENT_QUOTES, 'UTF-8' );
-					} else {
-						$title = $titleObj->text();
-					}
-				} else {
-					$title = $text;
-				}
-
-				if ( isset( $data['link'] ) ) {
-					// Link href
-					// @todo CHECKME: Should this use wfUrlProtocols() or somesuch instead?
-					if ( preg_match( '/^((?:(?:http(?:s)?)?:)?\/\/(?:.{4,}))$/i', $data['link'] ) ) {
-						$href = htmlentities( $data['link'], ENT_QUOTES, 'UTF-8' );
-					} else {
-						$href = str_replace( '%3A', ':', urlencode( $data['link'] ) );
-						$href = str_replace( '$1', $href, $wgArticlePath );
-					}
-				}
-
-				if ( isset( $data['access'] ) ) {
-					// Access
-					$access = preg_match( '/^([0-9a-z]{1})$/i', $data['access'] ) ? $data['access'] : '';
-				} else {
-					$access = null;
-				}
-
-				if ( isset( $data['class'] ) ) {
-					// Classes
-					$classes = explode( ',', htmlentities( $data['class'], ENT_QUOTES, 'UTF-8' ) );
-					foreach ( $classes as $key => $value ) {
-						$classes[$key] = trim( $value );
-					}
-				} else {
-					$classes = [];
-				}
-
-				$item = [
-					'access' => $access,
-					'classes' => $classes,
-					'href' => $href,
-					'icon' => $icon,
-					'text' => $text,
-					'title' => $title,
-					'group' => $group,
-					'right' => $right
-				];
-				$level3Children = &$item['children'];
-				$level2Children[] = $item;
-				continue;
-			}
-			if ( $line[3] !== '*' ) {
-				// Third level menu
-				// Initialize item
-				$icon = null;
-				$text = null;
-				$title = null;
-				$href = null;
-				$access = null;
-				$classes = [];
-				$group = null;
-				$right = null;
-
-				$data = [];
-				$split = explode( '|', $line );
-				$split[0] = substr( $split[0], 3 );
-				foreach ( $split as $key => $value ) {
-					$valueArr = explode( '=', trim( $value ) );
-					if ( isset( $valueArr[1] ) ) {
-						$data[$valueArr[0]] = $valueArr[1];
-					} else {
-						$data[$types[$key]] = trim( $value );
-					}
-				}
-
-				// Icon
-				$icon = isset( $data['icon'] ) ? htmlentities( $data['icon'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// Group
-				$group = isset( $data['group'] ) ? htmlentities( $data['group'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// Right
-				$right = isset( $data['right'] ) ? htmlentities( $data['right'], ENT_QUOTES, 'UTF-8' ) : null;
-
-				// support the usual [[MediaWiki:Sidebar]] syntax of
-				// ** link target|<some MW: message name> and if the
-				// thing on the right side of the pipe isn't the name of a MW:
-				// message, then and _only_ then render it as-is
-				if ( isset( $data['display'] ) ) {
-					$textObj = $skin->msg( $data['display'] );
-					if ( $textObj->isDisabled() ) {
-						$text = htmlentities( $data['display'], ENT_QUOTES, 'UTF-8' );
-					} else {
-						$text = $textObj->text();
-					}
-				} else {
-					$text = '';
-				}
-
-				// If icon and text both empty
-				if ( empty( $icon ) && empty( $text ) ) {
-					continue;
-				}
-
-				// Title
-				if ( isset( $data['title'] ) ) {
-					$titleObj = $skin->msg( $data['title'] );
-					if ( $titleObj->isDisabled() ) {
-						$title = htmlentities( $data['title'], ENT_QUOTES, 'UTF-8' );
-					} else {
-						$title = $titleObj->text();
-					}
-				} else {
-					if ( isset( $text ) ) {
-						$title = $text;
-					} else {
-						$title = '';
-					}
-				}
-
-				// Link href
-				// @todo CHECKME: Should this use wfUrlProtocols() or somesuch instead?
-				if ( preg_match( '/^((?:(?:http(?:s)?)?:)?\/\/(?:.{4,}))$/i', $data['link'] ) ) {
-					$href = htmlentities( $data['link'], ENT_QUOTES, 'UTF-8' );
-				} else {
-					$href = str_replace( '%3A', ':', urlencode( $data['link'] ) );
-					$href = str_replace( '$1', $href, $wgArticlePath );
-				}
-
-				// Access
-				if ( isset( $data['access'] ) ) {
-					$access = preg_match( '/^([0-9a-z]{1})$/i', $data['access'] ) ? $data['access'] : '';
-				} else {
-					$access = null;
-				}
-
-				if ( isset( $data['class'] ) ) {
-					// Classes
-					$classes = explode( ',', htmlentities( $data['class'], ENT_QUOTES, 'UTF-8' ) );
-					foreach ( $classes as $key => $value ) {
-						$classes[$key] = trim( $value );
-					}
-				} else {
-					$classes = [];
-				}
-
-				$item = [
-					'access' => $access,
-					'classes' => $classes,
-					'href' => $href,
-					'icon' => $icon,
-					'text' => $text,
-					'title' => $title,
-					'group' => $group,
-					'right' => $right
-				];
-				$level3Children[] = $item;
-				continue;
-			} else {
-				// Not supported
+				$headings[$level + 1] = &$item['children'];
+				$headings[$level][] = $item;
 				continue;
 			}
 		}
 
-		return $headings;
+		return $headings[1];
 	}
 
 	/**
