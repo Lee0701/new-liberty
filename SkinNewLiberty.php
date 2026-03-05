@@ -92,8 +92,8 @@ class SkinNewLiberty extends SkinMustache {
 				if(!in_array($item['id'], $exclude_ids)) $result[] = $item;
 				// Add divider after delete menu
 				if($item['id'] == 'ca-delete') $result[] = $divider;
-				// Add divider after protect menu
-				if($item['id'] == 'ca-protect') $result[] = $divider;
+				// Add divider after protect/unprotect menu
+				if($item['id'] == 'ca-protect' or $item['id'] == 'ca-unprotect') $result[] = $divider;
 				// Add divider after what links here menu
 				if($item['id'] == 't-whatlinkshere') $result[] = $divider;
 			}
